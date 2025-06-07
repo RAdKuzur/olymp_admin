@@ -16,6 +16,28 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '1xUDW5MiJuev31wqSp1A_0wyukIsTnIM',
         ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '172.16.0.94',
+            'port' => 6379,
+            'database' => 0,
+        ],
+        'rabbitmq' => [
+            'class' => 'app\components\RabbitMQComponent',
+            'host' => '172.16.0.94',
+            'port' => 5672,
+            'user' => 'test',
+            'password' => 'test',
+            'vhost' => '/',
+        ],
+        'apiService' => [
+            'class' => 'app\services\ApiService',
+            'baseUrl' => 'http://172.16.0.94/olymp_journal/frontend/web/api',
+            'timeout' => 60,
+            'defaultHeaders' => [
+                'Authorization' => 'Bearer your-access-token',
+            ],
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
