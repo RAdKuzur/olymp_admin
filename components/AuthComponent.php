@@ -8,8 +8,6 @@ class AuthComponent
 {
     public static function isGuest()
     {
-        return (Yii::$app->request->cookies->has('usernameBack') ||
-                Yii::$app->request->cookies->has('usernameFront'))  &&
-            Yii::$app->params['authRequired'];
+        return Yii::$app->request->cookies->has('username') && Yii::$app->params['authRequired'];
     }
 }
