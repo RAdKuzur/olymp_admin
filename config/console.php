@@ -36,6 +36,12 @@ $config = [
                 'Authorization' => 'Bearer your-access-token',
             ],
         ],
+        'genders' => [
+            'class' => 'app\components\dictionaries\GenderDictionary',
+        ],
+        'roles' => [
+            'class' => 'app\components\dictionaries\RoleDictionary',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

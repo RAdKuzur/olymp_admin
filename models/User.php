@@ -2,103 +2,77 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use Yii;
+
+/**
+ * This is the model class for table "user".
+ *
+ * @property int $id
+ * @property string $email
+ * @property string $password_hash
+ * @property string $firstname
+ * @property string $surname
+ * @property string|null $patronymic
+ * @property string $phone_number
+ * @property string $birthdate
+ * @property int $gender
+ * @property int $role
+ * @property int $active
+ */
+class User extends \yii\db\ActiveRecord
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
-
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public static function tableName()
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return 'user';
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function rules()
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return [
+            [['patronymic'], 'default', 'value' => null],
+            [['email', 'password_hash', 'firstname', 'surname', 'phone_number', 'birthdate', 'gender', 'role', 'active'], 'required'],
+            [['password_hash'], 'string'],
+            [['birthdate'], 'safe'],
+            [['gender', 'role', 'active'], 'integer'],
+            [['email', 'firstname', 'surname', 'patronymic', 'phone_number'], 'string', 'max' => 64],
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function attributeLabels()
     {
-        return $this->id;
+        return [
+            'id' => 'ID',
+            'email' => 'Email',
+            'password_hash' => 'Password Hash',
+            'firstname' => 'Firstname',
+            'surname' => 'Surname',
+            'patronymic' => 'Patronymic',
+            'phone_number' => 'Phone Number',
+            'birthdate' => 'Birthdate',
+            'gender' => 'Gender',
+            'role' => 'Role',
+            'active' => 'Active',
+        ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
+    public function getFullFio(){
+        return $this->firstname . ' ' . $this->surname . ' ' . $this->patronymic;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
+    public function beforeValidate()
     {
-        return $this->authKey === $authKey;
+        $this->active = 1;
+        return parent::beforeValidate();
     }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return $this->password === $password;
+    public function beforeSave($insert){
+        $this->password_hash = Yii::$app->security->generatePasswordHash($this->password_hash);
+        return parent::beforeSave($insert);
     }
 }

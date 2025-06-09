@@ -21,6 +21,9 @@ class Yii {
 /**
  * @property yii\rbac\DbManager $authManager 
  * @property \yii\web\User|__WebUser $user
+ * @property \app\components\RabbitMQComponent $rabbitmq
+ * @property \app\components\dictionaries\GenderDictionary $genders
+ * @property \app\components\dictionaries\RoleDictionary $roles
  * 
  */
 class __Application {
