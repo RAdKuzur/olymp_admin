@@ -5,5 +5,5 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     'appName' => 'ВсОШ.Админ-панель',
-    'authRequired' => false
+    'authRequired' => true
 ];
