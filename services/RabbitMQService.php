@@ -3,7 +3,6 @@
 namespace app\services;
 
 use app\components\helpers\RabbitMQHelper;
-use app\components\MicroserviceHelper;
 use Yii;
 use function Symfony\Component\String\b;
 
@@ -23,7 +22,7 @@ class RabbitMQService
             Yii::$app->rabbitmq->publish($queueName, $data);
         }
     }
-    public function consume($queueName = RabbitMQHelper::RESULT_SERVICE){
+    public function consume($queueName = RabbitMQHelper::QUEUE_NAME){
         $data = [];
         Yii::$app->rabbitmq->consume($queueName, function ($message) use (&$data) {
             $data[] = json_decode($message);
@@ -34,13 +33,13 @@ class RabbitMQService
     public function message($data){
         foreach ($data as $item){
             switch ($item->method) {
-                case MicroserviceHelper::CREATE:
+                case RabbitMQHelper::CREATE:
                     $this->create($item);
                     break;
-                case MicroserviceHelper::UPDATE:
+                case RabbitMQHelper::UPDATE:
                     $this->update($item);
                     break;
-                case MicroserviceHelper::DELETE:
+                case RabbitMQHelper::DELETE:
                     $this->delete($item);
                     break;
             }

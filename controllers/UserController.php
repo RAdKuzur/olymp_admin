@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\components\AuthComponent;
 use app\components\DataProviderHelper;
-use app\components\MicroserviceHelper;
+use app\components\helpers\RabbitMQHelper;
 use app\models\User;
 use app\repositories\UserRepository;
 use app\services\RabbitMQService;
@@ -44,10 +44,10 @@ class UserController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $this->userRepository->save($model);
             $this->rabbitMQService->publish(
-                [MicroserviceHelper::QUEUE_NAME],
+                [RabbitMQHelper::AUTH_QUEUE_NAME],
                 Yii::$app->params['serviceName'],
-                MicroserviceHelper::CREATE,
-                MicroserviceHelper::USER_TABLE,
+                RabbitMQHelper::CREATE,
+                RabbitMQHelper::USER_TABLE,
                 array_diff_key($model->getAttributes(), ['id' => null]),
             );
             return $this->redirect(['view', 'id' => $model->id]);
@@ -60,10 +60,10 @@ class UserController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $this->userRepository->save($model);
             $this->rabbitMQService->publish(
-                [MicroserviceHelper::QUEUE_NAME],
+                [RabbitMQHelper::AUTH_QUEUE_NAME],
                 Yii::$app->params['serviceName'],
-                MicroserviceHelper::UPDATE,
-                MicroserviceHelper::USER_TABLE,
+                RabbitMQHelper::UPDATE,
+                RabbitMQHelper::USER_TABLE,
                 array_diff_key($model->getAttributes(), ['id' => null]),
                 ['id' => $id]
             );
@@ -76,10 +76,10 @@ class UserController extends Controller
         $model = $this->userRepository->get($id);
         $this->userRepository->delete($model);
         $this->rabbitMQService->publish(
-            [MicroserviceHelper::QUEUE_NAME],
+            [RabbitMQHelper::AUTH_QUEUE_NAME],
             Yii::$app->params['serviceName'],
-            MicroserviceHelper::DELETE,
-            MicroserviceHelper::USER_TABLE,
+            RabbitMQHelper::DELETE,
+            RabbitMQHelper::USER_TABLE,
             [],
             ['id' => $id]
         );
