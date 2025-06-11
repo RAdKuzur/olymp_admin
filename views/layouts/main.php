@@ -45,6 +45,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Заявки', 'url' => ['/application/index']],
             ['label' => 'Участники деятельности', 'url' => ['/participant/index']],
             ['label' => 'Пользователи', 'url' => ['/user/index']],
+            ['label' => 'Обр. учреждения', 'url' => ['/school/index']],
         ]
     ]);
     if (!Yii::$app->request->cookies->getValue('username')) {

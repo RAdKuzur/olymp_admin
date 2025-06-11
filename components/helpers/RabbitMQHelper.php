@@ -14,4 +14,6 @@ class RabbitMQHelper
     public const APPLICATION_QUEUE_NAME = 'olymp_application';
     public const EVENT_QUEUE_NAME = 'olymp_event';
     public const USER_TABLE = 'user';
+    public const PARTICIPANT_TABLE = 'participant';
+    public const SCHOOL_TABLE = 'school';
 }

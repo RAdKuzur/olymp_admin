@@ -24,6 +24,10 @@ class Yii {
  * @property \app\components\RabbitMQComponent $rabbitmq
  * @property \app\components\dictionaries\GenderDictionary $genders
  * @property \app\components\dictionaries\RoleDictionary $roles
+ * @property \app\components\dictionaries\DisabilityDictionary $disabilities
+ * @property \app\components\dictionaries\ClassDictionary $classes
+ * @property \app\components\dictionaries\CountryDictionary $countries
+ * @property \app\components\dictionaries\RegionDictionary $regions
  * 
  */
 class __Application {

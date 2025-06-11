@@ -42,6 +42,18 @@ $config = [
         'roles' => [
             'class' => 'app\components\dictionaries\RoleDictionary',
         ],
+        'disabilities' => [
+            'class' => 'app\components\dictionaries\DisabilityDictionary',
+        ],
+        'classes' => [
+            'class' => 'app\components\dictionaries\ClassDictionary',
+        ],
+        'countries' => [
+            'class' => 'app\components\dictionaries\CountryDictionary',
+        ],
+        'regions' => [
+            'class' => 'app\components\dictionaries\RegionDictionary',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

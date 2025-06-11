@@ -2,20 +2,20 @@
 
 namespace app\repositories;
 
-use app\models\Participant;
+use app\models\School;
 
-class ParticipantRepository
+class SchoolRepository
 {
     public function get($id)
     {
-        return Participant::findOne($id);
+        return School::findOne($id);
     }
     public function getAll()
     {
-        return Participant::find()->all();
+        return School::find()->all();
     }
     public function query(){
-        return Participant::find();
+        return School::find();
     }
     public function save($model)
     {
