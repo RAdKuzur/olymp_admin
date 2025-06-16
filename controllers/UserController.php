@@ -42,7 +42,6 @@ class UserController extends Controller
     {
         $model = new User();
         if ($model->load(Yii::$app->request->post())) {
-            $this->userRepository->save($model);
             $this->rabbitMQService->publish(
                 [RabbitMQHelper::AUTH_QUEUE_NAME],
                 Yii::$app->params['serviceName'],
@@ -50,6 +49,7 @@ class UserController extends Controller
                 RabbitMQHelper::USER_TABLE,
                 array_diff_key($model->getAttributes(), ['id' => null]),
             );
+            $this->userRepository->save($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
         return $this->render('create', ['model' => $model]);
@@ -58,7 +58,6 @@ class UserController extends Controller
     {
         $model = $this->userRepository->get($id);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $this->userRepository->save($model);
             $this->rabbitMQService->publish(
                 [RabbitMQHelper::AUTH_QUEUE_NAME],
                 Yii::$app->params['serviceName'],
@@ -67,6 +66,7 @@ class UserController extends Controller
                 array_diff_key($model->getAttributes(), ['id' => null]),
                 ['id' => $id]
             );
+            $this->userRepository->save($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
         return $this->render('update', ['model' => $model]);
@@ -74,7 +74,6 @@ class UserController extends Controller
     public function actionDelete($id)
     {
         $model = $this->userRepository->get($id);
-        $this->userRepository->delete($model);
         $this->rabbitMQService->publish(
             [RabbitMQHelper::AUTH_QUEUE_NAME],
             Yii::$app->params['serviceName'],
@@ -83,6 +82,7 @@ class UserController extends Controller
             [],
             ['id' => $id]
         );
+        $this->userRepository->delete($model);
         return $this->redirect(['index']);
     }
     public function beforeAction($action){
