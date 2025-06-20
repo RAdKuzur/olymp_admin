@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $email
- * @property string $password_hash
+ * @property string $password
  * @property string $firstname
  * @property string $surname
  * @property string|null $patronymic
@@ -24,6 +24,34 @@ class User extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public static function fill(
+        $id,
+        $email,
+        $passwordHash,
+        $firstname,
+        $surname,
+        $patronymic,
+        $phoneNumber,
+        $birthdate,
+        $gender,
+        $role,
+        $active = 1
+    )
+    {
+        $entity = new static();
+        $entity->id = $id;
+        $entity->email = $email;
+        $entity->password = $passwordHash;
+        $entity->firstname = $firstname;
+        $entity->surname = $surname;
+        $entity->patronymic = $patronymic;
+        $entity->phone_number = $phoneNumber;
+        $entity->birthdate = $birthdate;
+        $entity->gender = $gender;
+        $entity->role = $role;
+        $entity->active = $active;
+
+    }
     public static function tableName()
     {
         return 'user';
@@ -36,8 +64,8 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['patronymic'], 'default', 'value' => null],
-            [['email', 'password_hash', 'firstname', 'surname', 'phone_number', 'birthdate', 'gender', 'role', 'active'], 'required'],
-            [['password_hash'], 'string'],
+            [['email', 'password', 'firstname', 'surname', 'phone_number', 'birthdate', 'gender', 'role', 'active'], 'required'],
+            [['password'], 'string'],
             [['birthdate'], 'safe'],
             [['gender', 'role', 'active'], 'integer'],
             [['email', 'firstname', 'surname', 'patronymic', 'phone_number'], 'string', 'max' => 64],
@@ -52,7 +80,7 @@ class User extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'email' => 'Email',
-            'password_hash' => 'Password Hash',
+            'password' => 'Password Hash',
             'firstname' => 'Firstname',
             'surname' => 'Surname',
             'patronymic' => 'Patronymic',
@@ -72,7 +100,7 @@ class User extends \yii\db\ActiveRecord
         return parent::beforeValidate();
     }
     public function beforeSave($insert){
-        $this->password_hash = Yii::$app->security->generatePasswordHash($this->password_hash);
+        $this->password = Yii::$app->security->generatePasswordHash($this->password);
         return parent::beforeSave($insert);
     }
 }

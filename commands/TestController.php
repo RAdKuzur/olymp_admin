@@ -29,7 +29,7 @@ class TestController extends Controller
             RabbitMQHelper::USER_TABLE,
             [
                 'email' => 'test@test.com',
-                'password_hash' => '$2y$13$93wnmnGWT1ADlkabnFXnheGvfDamiOHzjwCCHdjZ1f44mfD3oUcD6',
+                'password' => '$2y$13$93wnmnGWT1ADlkabnFXnheGvfDamiOHzjwCCHdjZ1f44mfD3oUcD6',
                 'surname' => 'test_surname',
                 'firstname' => 'test_firstname',
                 'patronymic' => 'test_patronymic',

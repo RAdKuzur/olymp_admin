@@ -28,6 +28,7 @@ class Yii {
  * @property \app\components\dictionaries\ClassDictionary $classes
  * @property \app\components\dictionaries\CountryDictionary $countries
  * @property \app\components\dictionaries\RegionDictionary $regions
+ * @property \app\services\ApiService $apiService
  * 
  */
 class __Application {

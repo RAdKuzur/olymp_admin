@@ -12,7 +12,7 @@ class m250609_171954_update_user_table extends Migration
         $this->createTable('user', [
             'id' => $this->primaryKey(),
             'email' => $this->string(64)->notNull(),
-            'password_hash' => $this->string()->notNull(),
+            'password' => $this->string()->notNull(),
             'firstname' => $this->string(64)->notNull(),
             'surname' => $this->string(64)->notNull(),
             'patronymic' => $this->string(64),

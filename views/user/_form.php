@@ -10,7 +10,7 @@ use yii\jui\DatePicker;
 
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label('Email(username)'); ?>
-<?= $form->field($model, 'password_hash')->textInput(['maxlength' => true])->label('Пароль(Хэш)'); ?>
+<?= $form->field($model, 'password')->textInput(['maxlength' => true])->label('Пароль(Хэш)'); ?>
 <?= $form->field($model, 'surname')->textInput(['maxlength' => true])->label('Фамилия'); ?>
 <?= $form->field($model, 'firstname')->textInput(['maxlength' => true])->label('Имя'); ?>
 <?= $form->field($model, 'patronymic')->textInput(['maxlength' => true])->label('Отчество'); ?>

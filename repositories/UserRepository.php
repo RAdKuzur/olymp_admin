@@ -2,7 +2,9 @@
 
 namespace app\repositories;
 
+use app\components\helpers\ApiHelper;
 use app\models\User;
+use Yii;
 
 class UserRepository
 {
@@ -17,6 +19,25 @@ class UserRepository
     public function getAll()
     {
         return User::find()->all();
+    }
+    public function getByApiAll($page = 1, $limit = 10)
+    {
+        return Yii::$app->apiService->get(
+            ApiHelper::USER_URL_API,
+            [
+                'page' => $page,
+                'limit' => $limit,
+            ]
+        );
+    }
+    public function getByApiId($id)
+    {
+        return Yii::$app->apiService->get(
+            ApiHelper::USER_URL_API,
+            [
+                'id' => $id
+            ]
+        );
     }
     public function save($model)
     {
