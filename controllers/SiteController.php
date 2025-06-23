@@ -37,26 +37,18 @@ class SiteController extends Controller
                 'email' => $model->username,
                 'password' => $model->password,
             ]);
-
             $content = json_decode($response['content']);
-            $token = $response['cookies']->getValue('token');
+            $token = $response['cookies']->getValue('refresh_token');
             if ($content->status_code == ApiHelper::STATUS_OK && isset($token)) {
-                // Создаем cookie
                 $cookie = new \yii\web\Cookie([
                     'name' => 'username',
                     'value' => ['email' => $model->username, 'token' => $token],
                     'httpOnly' => true,
-                    'path' => '/',              // важно: общий путь
-                    'expire' => time() + 86400 * 365, // срок действия - 1 год
+                    'path' => '/',
+                    'expire' => time() + 86400 * 365,
                 ]);
-
-                // Добавляем cookie в response
                 Yii::$app->response->cookies->add($cookie);
-
-                // ВАЖНО: сначала добавляем cookie, потом делаем редирект
                 $response = $this->goBack();
-
-                // Убедимся, что cookie сохранилась в редиректе
                 if (Yii::$app->response->cookies->has('cookie_name')) {
                     return $response;
                 } else {
@@ -66,7 +58,6 @@ class SiteController extends Controller
                 Yii::$app->session->setFlash('error', 'Ошибка авторизации');
             }
         }
-
         $model->password = '';
         return $this->render('login', [
             'model' => $model,

@@ -27,15 +27,19 @@ class UserRepository
             [
                 'page' => $page,
                 'limit' => $limit,
+            ],
+            [
+                'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
             ]
         );
     }
     public function getByApiId($id)
     {
         return Yii::$app->apiService->get(
-            ApiHelper::USER_URL_API,
+            ApiHelper::USER_URL_API . '/' . $id,
+            [],
             [
-                'id' => $id
+                'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
             ]
         );
     }

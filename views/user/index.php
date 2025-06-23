@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $users,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+
             [
                 'attribute' => 'fullFio',
             ],
@@ -29,6 +30,25 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}', // задаем порядок и наличие кнопок
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        $url = \yii\helpers\Url::to(['view', 'id' => $model->id]);
+                        return Html::a('Просмотр', $url, ['class' => 'btn btn-sm btn-primary']);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        $url = \yii\helpers\Url::to(['update', 'id' => $model->id]);
+                        return Html::a('Редактировать', $url, ['class' => 'btn btn-sm btn-warning']);
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        $url = \yii\helpers\Url::to(['delete', 'id' => $model->id]);
+                        return Html::a('Удалить', $url, [
+                            'class' => 'btn btn-sm btn-danger',
+                            'data-confirm' => 'Вы уверены, что хотите удалить этот элемент?',
+                            'data-method' => 'post',
+                        ]);
+                    },
+                ],
             ],
         ],
     ]);

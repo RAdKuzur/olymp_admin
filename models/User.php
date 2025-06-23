@@ -27,7 +27,7 @@ class User extends \yii\db\ActiveRecord
     public static function fill(
         $id,
         $email,
-        $passwordHash,
+        $password,
         $firstname,
         $surname,
         $patronymic,
@@ -41,7 +41,7 @@ class User extends \yii\db\ActiveRecord
         $entity = new static();
         $entity->id = $id;
         $entity->email = $email;
-        $entity->password = $passwordHash;
+        $entity->password = $password;
         $entity->firstname = $firstname;
         $entity->surname = $surname;
         $entity->patronymic = $patronymic;
@@ -80,7 +80,7 @@ class User extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'email' => 'Email',
-            'password' => 'Password Hash',
+            'password' => 'Password',
             'firstname' => 'Firstname',
             'surname' => 'Surname',
             'patronymic' => 'Patronymic',

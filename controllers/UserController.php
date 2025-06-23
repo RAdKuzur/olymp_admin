@@ -8,6 +8,7 @@ use app\components\helpers\RabbitMQHelper;
 use app\models\User;
 use app\repositories\UserRepository;
 use app\services\RabbitMQService;
+use app\services\UserService;
 use Yii;
 use yii\web\Controller;
 
@@ -15,27 +16,32 @@ class UserController extends Controller
 {
     private UserRepository $userRepository;
     private RabbitMQService $rabbitMQService;
+    private UserService $userService;
     public function __construct(
         $id,
         $module,
         UserRepository $userRepository,
         RabbitMQService $rabbitMQService,
+        UserService $userService,
         $config = []
     )
     {
         $this->userRepository = $userRepository;
         $this->rabbitMQService = $rabbitMQService;
+        $this->userService = $userService;
         parent::__construct($id, $module, $config);
     }
 
     public function actionIndex()
     {
-        $users = $this->userRepository->query();
-        return $this->render('index', ['users' => DataProviderHelper::createActiveDataProvider($users)]);
+        $usersJson = $this->userRepository->getByApiAll();
+        $users = $this->userService->transform($usersJson);
+        return $this->render('index', ['users' => DataProviderHelper::createArrayDataProvider($users)]);
     }
     public function actionView($id)
     {
-        $model = $this->userRepository->get($id);
+        $modelJson = $this->userRepository->getByApiId($id);
+        $model = $this->userService->transformModel($modelJson);
         return $this->render('view', ['model' => $model]);
     }
     public function actionCreate()
@@ -49,14 +55,15 @@ class UserController extends Controller
                 RabbitMQHelper::USER_TABLE,
                 array_diff_key($model->getAttributes(), ['id' => null]),
             );
-            $this->userRepository->save($model);
+            //$this->userRepository->save($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
         return $this->render('create', ['model' => $model]);
     }
     public function actionUpdate($id)
     {
-        $model = $this->userRepository->get($id);
+        $modelJson = $this->userRepository->getByApiId($id);
+        $model = $this->userService->transformModel($modelJson);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $this->rabbitMQService->publish(
                 [RabbitMQHelper::AUTH_QUEUE_NAME],
@@ -66,14 +73,13 @@ class UserController extends Controller
                 array_diff_key($model->getAttributes(), ['id' => null]),
                 ['id' => $id]
             );
-            $this->userRepository->save($model);
+            //$this->userRepository->save($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
         return $this->render('update', ['model' => $model]);
     }
     public function actionDelete($id)
     {
-        $model = $this->userRepository->get($id);
         $this->rabbitMQService->publish(
             [RabbitMQHelper::AUTH_QUEUE_NAME],
             Yii::$app->params['serviceName'],
@@ -82,7 +88,6 @@ class UserController extends Controller
             [],
             ['id' => $id]
         );
-        $this->userRepository->delete($model);
         return $this->redirect(['index']);
     }
     public function beforeAction($action){

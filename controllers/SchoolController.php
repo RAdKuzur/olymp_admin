@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\AuthComponent;
 use app\components\DataProviderHelper;
 use app\components\helpers\RabbitMQHelper;
 use app\models\School;
@@ -78,5 +79,11 @@ class SchoolController extends Controller
             ['id' => $id]
         );
         return $this->redirect(['index']);
+    }
+    public function beforeAction($action){
+        if (AuthComponent::isGuest()){
+            return $this->redirect('index.php?r=site/login');
+        }
+        return parent::beforeAction($action);
     }
 }
