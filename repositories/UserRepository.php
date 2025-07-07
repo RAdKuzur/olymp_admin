@@ -42,13 +42,14 @@ class UserRepository
     }
     public function getCount()
     {
-        return Yii::$app->apiService->get(
+        $response = Yii::$app->apiService->get(
             ApiHelper::USER_COUNT_URL_API,
             [],
             [
                 'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
             ]
         );
+        return json_decode($response['content'])->data;
     }
     public function save($model)
     {

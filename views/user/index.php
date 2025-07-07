@@ -8,6 +8,7 @@ use yii\helpers\Html;
 $this->title = 'Список пользователей';
 $this->params['breadcrumbs'][] = $this->title;
 /* @var $users */
+/* @var $usersAmount */
 ?>
 <div class="user-index">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -53,4 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
     ?>
+    <div class="pagination">
+        <?php for ($i = 0 ; $i <= $usersAmount / 10; $i++) { ?>
+            <a href="<?= \yii\helpers\Url::to(['index', 'page' => $i + 1]) ?>"><?= $i + 1 ?>   </a>
+        <?php }?>
+    </div>
 </div>

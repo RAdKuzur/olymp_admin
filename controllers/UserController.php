@@ -32,12 +32,15 @@ class UserController extends Controller
         parent::__construct($id, $module, $config);
     }
 
-    public function actionIndex()
+    public function actionIndex($page = 1)
     {
-        $usersJson = $this->userRepository->getByApiAll();
-        var_dump($this->userRepository->getCount());
+        $usersJson = $this->userRepository->getByApiAll($page);
+        $usersAmount = $this->userRepository->getCount();
         $users = $this->userService->transform($usersJson);
-        return $this->render('index', ['users' => DataProviderHelper::createArrayDataProvider($users)]);
+        return $this->render('index', [
+            'users' => DataProviderHelper::createArrayDataProvider($users),
+            'usersAmount' => $usersAmount
+        ]);
     }
     public function actionView($id)
     {
