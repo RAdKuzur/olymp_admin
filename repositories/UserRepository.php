@@ -23,11 +23,8 @@ class UserRepository
     public function getByApiAll($page = 1, $limit = 10)
     {
         return Yii::$app->apiService->get(
-            ApiHelper::USER_URL_API,
-            [
-                'page' => $page,
-                'limit' => $limit,
-            ],
+            ApiHelper::USER_URL_API . '?page=' . $page . '&limit=' . $limit,
+            [],
             [
                 'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
             ]
@@ -37,6 +34,16 @@ class UserRepository
     {
         return Yii::$app->apiService->get(
             ApiHelper::USER_URL_API . '/' . $id,
+            [],
+            [
+                'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
+            ]
+        );
+    }
+    public function getCount()
+    {
+        return Yii::$app->apiService->get(
+            ApiHelper::USER_COUNT_URL_API,
             [],
             [
                 'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],

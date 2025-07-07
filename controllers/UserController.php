@@ -35,6 +35,7 @@ class UserController extends Controller
     public function actionIndex()
     {
         $usersJson = $this->userRepository->getByApiAll();
+        var_dump($this->userRepository->getCount());
         $users = $this->userService->transform($usersJson);
         return $this->render('index', ['users' => DataProviderHelper::createArrayDataProvider($users)]);
     }
