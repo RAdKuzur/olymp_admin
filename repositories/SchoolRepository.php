@@ -2,7 +2,9 @@
 
 namespace app\repositories;
 
+use app\components\helpers\ApiHelper;
 use app\models\School;
+use Yii;
 
 class SchoolRepository
 {
@@ -16,6 +18,37 @@ class SchoolRepository
     }
     public function query(){
         return School::find();
+    }
+    public function getByApiAll($page = 1, $limit = 10)
+    {
+        return Yii::$app->apiService->get(
+            ApiHelper::SCHOOL_URL_API . '?page=' . $page . '&limit=' . $limit,
+            [],
+            [
+                'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
+            ]
+        );
+    }
+    public function getByApiId($id)
+    {
+        return Yii::$app->apiService->get(
+            ApiHelper::SCHOOL_URL_API . '/' . $id,
+            [],
+            [
+                'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
+            ]
+        );
+    }
+    public function getCount()
+    {
+        $response = Yii::$app->apiService->get(
+            ApiHelper::SCHOOL_COUNT_URL_API,
+            [],
+            [
+                'Authorization' => "Bearer ". Yii::$app->request->cookies->get('username')->value['token'],
+            ]
+        );
+        return json_decode($response['content'])->data;
     }
     public function save($model)
     {

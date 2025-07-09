@@ -9,6 +9,7 @@ use app\models\Participant;
 use app\repositories\ParticipantRepository;
 use app\repositories\SchoolRepository;
 use app\repositories\UserRepository;
+use app\services\ParticipantService;
 use app\services\RabbitMQService;
 use Yii;
 use yii\web\Controller;
@@ -19,6 +20,7 @@ class ParticipantController extends Controller
     private UserRepository $userRepository;
     private SchoolRepository $schoolRepository;
     private RabbitMQService $rabbitMQService;
+    private ParticipantService $participantService;
     public function __construct(
         $id,
         $module,
@@ -26,6 +28,7 @@ class ParticipantController extends Controller
         UserRepository $userRepository,
         SchoolRepository $schoolRepository,
         RabbitMQService $rabbitMQService,
+        ParticipantService $participantService,
         $config = []
     )
     {
@@ -33,19 +36,24 @@ class ParticipantController extends Controller
         $this->userRepository = $userRepository;
         $this->schoolRepository = $schoolRepository;
         $this->rabbitMQService = $rabbitMQService;
+        $this->participantService = $participantService;
         parent::__construct($id, $module, $config);
     }
 
-    public function actionIndex()
+    public function actionIndex($page = 1)
     {
-        $participants = $this->participantRepository->query();
+        $participantsJson = $this->participantRepository->getByApiAll($page);
+        $participantsAmount = $this->participantRepository->getCount();
+        $participants = $this->participantService->transform($participantsJson);
         return $this->render('index', [
-            'participants' => DataProviderHelper::createActiveDataProvider($participants)
+            'participants' => DataProviderHelper::createArrayDataProvider($participants),
+            'participantsAmount' => $participantsAmount,
         ]);
     }
     public function actionView($id)
     {
-        $model = $this->participantRepository->get($id);
+        $modelJson = $this->participantRepository->getByApiId($id);
+        $model = $this->participantService->transformModel($modelJson);
         return $this->render('view', [
             'model' => $model,
         ]);

@@ -22,12 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'fullFio',
+                'label' => 'ФИО'
             ],
             [
                 'attribute' => 'email',
+                'label' => 'Эл.почта'
             ],
             [
                 'attribute' => 'phone_number',
+                'label' => 'Номер телефона'
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

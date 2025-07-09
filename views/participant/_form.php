@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
-<?= $form->field($model, 'user_id')->dropDownList(\yii\helpers\ArrayHelper::map($users, 'id', 'fullFio'))->label('Пользователь'); ?>
 <?= $form->field($model, 'disability')->dropDownList(Yii::$app->disabilities->getList())->label('Ограничения по здоровью'); ?>
 <?= $form->field($model, 'class')->dropDownList(Yii::$app->classes->getList())->label('Класс обучения'); ?>
 <?= $form->field($model, 'citizenship')->dropDownList(Yii::$app->countries->getList())->label('Гражданство'); ?>

@@ -19,7 +19,8 @@ use Yii;
  */
 class Participant extends \yii\db\ActiveRecord
 {
-
+    public User $userAPI;
+    public School $schoolAPI;
 
     /**
      * {@inheritdoc}

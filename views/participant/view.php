@@ -6,7 +6,7 @@ use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-$this->title = 'Просмотр участника деятельности ' . $model->user->getFullFio();
+$this->title = 'Просмотр участника деятельности ' . $model->userAPI->getFullFio();
 $this->params['breadcrumbs'][] = ['label' => 'Список участников деятельности', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'fullFio',
                 'label' => 'ФИО',
                 'value' => function ($model) {
-                    return $model->user->getFullFio();
+                    return $model->userAPI->getFullFio();
                 }
             ],
             [
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'school_id',
                 'label' => 'Обр. учреждение',
                 'value' => function ($model) {
-                    return $model->school->name;
+                    return $model->schoolAPI->name;
                 }
             ],
             [
